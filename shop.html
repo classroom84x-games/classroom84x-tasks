@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gift Card Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #39ff14;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      text-shadow: 0 0 10px #39ff14;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 2px solid #39ff14;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #39ff14;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card button {
+      background: transparent;
+      border: 2px solid #39ff14;
+      color: #39ff14;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .card button:hover {
+      background-color: #39ff14;
+      color: #0d0d0d;
+    }
+
+    .points {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎁 Gift Card Shop</h1>
+  <div class="points" id="user-points">Loading points...</div>
+  <div class="card">
+    <span>$5 Amazon Gift Card - 5,000 pts</span>
+    <button onclick="redeemGiftCard('Amazon', 500)">Redeem</button>
+  </div>
+  <div class="card">
+    <span>$10 Roblox Gift Card - 10,000 pts</span>
+    <button onclick="redeemGiftCard('Roblox', 1000)">Redeem</button>
+  </div>
+  <div class="card">
+    <span>$15 Visa Gift Card - 15,000 pts</span>
+    <button onclick="redeemGiftCard('Visa', 1500)">Redeem</button>
+  </div>
+
+  <script>
+    const currentUser = localStorage.getItem("loggedInUser");
+    if (!currentUser) {
+      alert("You must be logged in.");
+      window.location.href = "login.html";
+    }
+
+    let userData = JSON.parse(localStorage.getItem("user_" + currentUser));
+
+    function updatePointsDisplay() {
+      document.getElementById("user-points").textContent = `Your Points: ${userData.points || 0}`;
+    }
+
+    updatePointsDisplay();
+
+    function redeemGiftCard(type, cost) {
+      if (userData.points >= cost) {
+        localStorage.setItem("pendingGiftCard", JSON.stringify({ type, cost }));
+        window.location.href = "giftcard-form.html";
+      } else {
+        alert("Not enough points!");
+      }
+    }
+  </script>
+</body>
+</html>
